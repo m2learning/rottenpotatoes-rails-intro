@@ -11,6 +11,9 @@ class MoviesController < ApplicationController
   end
 
   def index
+    if params[:sort_by_title]
+      @sort_by_movie = 1
+    end
     @movies = Movie.all
   end
 

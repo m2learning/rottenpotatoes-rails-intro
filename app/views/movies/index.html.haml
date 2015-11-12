@@ -1,12 +1,12 @@
--#  This file is app/views/movies/index.html.haml
+#  Thisse_date_header file is app/views/movies/index.html.haml
 %h1 All Movies
 
 %table#movies
   %thead
     %tr
-      %th Movie Title
+      %th{class: @sort_by_title && "hilite"}= link_to 'Movie Title', movies_path({sort_by_title: 1}), id: 'title_header'
       %th Rating
-      %th Release Date
+      %th{class: @sort_by_release && "hilite"}= link_to 'Release Date', movies_path({sort_by_release: 1}), id: 'release_date_header'
       %th More Info
   %tbody
     - @movies.each do |movie|
