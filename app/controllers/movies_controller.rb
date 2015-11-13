@@ -15,11 +15,13 @@ class MoviesController < ApplicationController
 
     unless params[:ratings]
       unless session[:index]
+          # Init session with all the ratings selected
           session[:index] = {}
           session[:index][:ratings] = {}
           @all_ratings.each {|r| session[:index][:ratings][r] = true}          
       end
       flash.keep
+      # redirect to a RESTFUL route
       redirect_to movies_path(session[:index])
       return
     end
