@@ -11,7 +11,14 @@ class MoviesController < ApplicationController
   end
 
   def index
+    @all_ratings = Movie.all_ratings
+    @rating_checked = {}
+    params[:commit] ? is_checked = false : is_checked = true
+    @all_ratings.each {|r| @rating_checked[r] = is_checked}
+    @all_ratings.each {|r| @rating_checked[r] = true if params[:ratings][r]} if params[:ratings]
+
     @movies = Movie.all
+    @movies = @movies.where(rating: params[:ratings].keys) if params[:ratings]
     if params[:sort_by_title]
       @sort_by_title = 1
       @movies = @movies.order(:title)
