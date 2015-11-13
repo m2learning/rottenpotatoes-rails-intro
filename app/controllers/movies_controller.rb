@@ -12,6 +12,28 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = Movie.all_ratings
+
+    unless params[:ratings]
+      unless session[:index]
+          session[:index] = {}
+          session[:index][:ratings] = {}
+          @all_ratings.each {|r| session[:index][:ratings][r] = true}          
+      end
+      flash.keep
+      redirect_to movies_path(session[:index])
+      return
+    end
+
+    session[:index] = params
+
+    @movies = Movie.all
+    @movies = @movies.where(rating: params[:ratings].keys)
+    @movies = @movies.order(:title) if params[:sort_by_title]
+    @movies = @movies.order(:release_date) if params[:sort_by_release]
+  end
+
+  def index_old
+    @all_ratings = Movie.all_ratings
     @rating_checked = {}
     params[:commit] ? is_checked = false : is_checked = true
     @all_ratings.each {|r| @rating_checked[r] = is_checked}
@@ -26,7 +48,7 @@ class MoviesController < ApplicationController
     if params[:sort_by_release]
       @sort_by_release = 1
       @movies = @movies.order(:release_date)
-    end    
+    end
   end
 
   def new
